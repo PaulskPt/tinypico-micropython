@@ -98,15 +98,15 @@ TinyPICO.set_dotstar_power( False )
 
 # Globals
 if use_sh1107:
-    disp_width = 128
-    disp_height = 64
+    disp_width  = 128
+    disp_height =  64
 
 if use_ssd1306:
-    disp_width = 160
-    disp_height = 80
+    disp_width  = 160
+    disp_height  = 80
     
 if use_st7735:
-    disp_width = 240
+    disp_width  = 240
     disp_height = 120
 
 yofs = {0: 20, 1: disp_height//2, 2: disp_height-20}
@@ -196,7 +196,7 @@ if use_st7735:
     if my_debug:
         print("Size received from TFT: width = {}, height = {}".format(tft.get_size()[0], tft.get_size()[1]))
 
-snake_start = (disp_width//2, disp_height//2)
+#snake_start = set_snake_startpos() # (disp_width//2, disp_height//2)
 # Add the TP logo to a frameBuf buffer and show it for 2 seconds    
 fbuf = framebuf.FrameBuffer(bytearray(bitmaps.icon_tinypico), disp_width, disp_height, framebuf.MONO_HLSB)
 
@@ -419,7 +419,8 @@ def setup_new_game():
     hor = 0
     vert = 1
     
-    snake.reset( x=snake_start[vert], y=snake_start[hor], len=3, dir=0 )
+    snake_start = set_snake_startpos() # generate a random start position
+    snake.reset( x=snake_start[hor], y=snake_start[vert], len=3, dir=0 )
 
     fruit_next = time.time() + fruit_interval
 
@@ -440,16 +441,28 @@ def show_gameover():
     if use_sh1107 or use_ssd1306:
         oled.show()
 
+def set_snake_startpos():
+    global snake_start
+    if my_debug:
+        print("set_snake_startpos(): disp_width {}, disp_height {}".format(disp_width, disp_height))
+    if use_sh1107 or use_ssd1306:
+        x = random.randint(5, disp_width-5)
+        y = random.randint(5, disp_height-5)
+    else:
+        x = random.randint(5, 160)
+        y = random.randint(5, 80)
+    print("random start position: ", (x,y))
+    return (x, y)
+    
 def main():
     global oled, tft, snake, game_state_changed, disp_width, disp_height, snake_start
     
     flasher.init(period=500, mode=Timer.PERIODIC, callback=flasher_update)
     # Create an instance of Snake
-    x = 80 # disp_width // 2 # was: 62
-    y = 40 # yofs[2]  # was: 30
     len = 6
     dir = 0
-    snake = Snake( snake_start[0], snake_start[1], x, y, len, dir )
+    snake_start = set_snake_startpos() # generate a random start position
+    snake = Snake( disp_width, disp_height, snake_start[0], snake_start[1], len, dir )
     
     if use_sh1107 or use_ssd1306:
         oled.blit(fbuf, 0, 2)
