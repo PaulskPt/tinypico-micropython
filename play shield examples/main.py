@@ -113,11 +113,23 @@ snake = None
 game_state = -1 #0 = menu, 1 = playing, 2 = pause, 3 = gameover
 game_state_changed = False
 snake_start = None  # tuple(h, v)
+snake_dir = None # initial direction of snake
 fruit_interval = 10
 fruit_next = 0
 default_freq = 1
 dflt_bg = None
 text_color = None
+disp_rotation = 3
+
+dir_dn = 0
+dir_lt = 1
+dir_up = 2
+dir_rt = 3
+
+dir_dict = {0: {0: "down",  1: "left",  2: "up",    3: "right"},  # outer  key = display orientation
+            1: {0: "left",  1: "up",    2: "right", 3: "down" }, # innter key = snake direction
+            2: {0: "right", 1: "down",  2: "left",  3: "up"   },
+            3: {0: "up",    1: "right", 2: "down",  3: "left" }}
 
 # Buttons
 BUT_1 = Pin(26, Pin.IN )
@@ -179,7 +191,7 @@ if use_st7735:
     dflt_bg = tft.BLACK
     text_color = tft.WHITE
     print("default background color = 0x{:x}".format(dflt_bg))
-    tft.rotation(3)  # rotation = 270 degs
+    tft.rotation(disp_rotation)  # rotation = 270 degs
     print("Rotation is set to: ", tft.get_rotation())
     tft.initg()
     print("Current display offset: ", tft.get_offset())
@@ -438,8 +450,10 @@ def show_gameover():
     if use_sh1107 or use_ssd1306:
         oled.show()
 
+
+
 def set_snake_startpos():
-    global snake_start
+    global snake_start, snake_dir
     if my_debug:
         print("set_snake_startpos(): disp_width {}, disp_height {}".format(disp_width, disp_height))
     if use_sh1107 or use_ssd1306:
@@ -449,6 +463,36 @@ def set_snake_startpos():
         x = random.randint(5, 160)
         y = random.randint(5, 80)
     print("random start position: ", (x,y))
+    
+    if isinstance(snake_dir, type(None)):
+        if x <= y:
+            if x < 10:
+                snake_dir = dir_rt
+            elif x > 155:
+                snake_dir = dir_lt
+            else:
+                snake_dir = random.randint(0,3)
+        elif y < x:
+            if y < 10:
+                snake_dir = dir_dn
+            elif y > 55:
+                snake_dir = dir_up
+            else:
+                snake_dir = random.randint(0,3)
+        
+    # Adjust initial direction of snake if he starts with moving close to the screen border
+    if snake_dir == dir_lt and x < 10:
+        snake_dir = dir_rt  # turn_right
+    if snake_dir == dir_rt and x > 155:
+        snake_dir = dir_lt  # turn left
+    if snake_dir == dir_up and y < 10:
+        snake_dir = dir_dn  # turn down
+    if snake_dir == dir_dn and y > 75:
+        snake_dir = dir_up  # turn up
+    if my_debug:
+        print("var snake_dir = ", snake_dir)
+        print("Snake initial direction: ", dir_dict[snake_dir])
+        
     return (x, y)
     
 def main():
@@ -459,7 +503,7 @@ def main():
     len = 6
     dir = 0
     snake_start = set_snake_startpos() # generate a random start position
-    snake = Snake( disp_width, disp_height, snake_start[0], snake_start[1], len, dir )
+    snake = Snake( disp_width, disp_height, snake_start[0], snake_start[1], len, dir, disp_rotation )
     
     if use_sh1107 or use_ssd1306:
         oled.blit(fbuf, 0, 2)
