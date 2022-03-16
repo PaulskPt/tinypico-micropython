@@ -121,13 +121,13 @@ dflt_bg = None
 text_color = None
 disp_rotation = 3
 
-dir_dn = 0
-dir_lt = 1
-dir_up = 2
-dir_rt = 3
+dir_0 = 0
+dir_1 = 1
+dir_2 = 2
+dir_3 = 3
 
-dir_dict = {0: {0: "left",  1: "up",    2: "right", 3: "down" },  # outer key = snake direction
-            1: {0: "down",  1: "left",  2: "up",    3: "right"},  # inner  key = display orientation
+dir_dict = {0: {0: "left",  1: "up",    2: "right", 3: "down" },  # outer key = display rotation
+            1: {0: "down",  1: "left",  2: "up",    3: "right"},  # inner key = snake direction
             2: {0: "right", 1: "down",  2: "left",  3: "up"   },
             3: {0: "up",    1: "right", 2: "down",  3: "left" }}
 
@@ -467,28 +467,28 @@ def set_snake_startpos():
     if isinstance(snake_dir, type(None)):
         if x <= y:
             if x < 10:
-                snake_dir = dir_rt
+                snake_dir = dir_3
             elif x > 155:
-                snake_dir = dir_lt
+                snake_dir = dir_1
             else:
                 snake_dir = random.randint(0,3)
         elif y < x:
             if y < 10:
-                snake_dir = dir_dn
+                snake_dir = dir_0
             elif y > 55:
-                snake_dir = dir_up
+                snake_dir = dir_2
             else:
                 snake_dir = random.randint(0,3)
         
     # Adjust initial direction of snake if he starts with moving close to the screen border
-    if snake_dir == dir_lt and x < 10:
-        snake_dir = dir_rt  # turn_right
-    if snake_dir == dir_rt and x > 155:
-        snake_dir = dir_lt  # turn left
-    if snake_dir == dir_up and y < 10:
-        snake_dir = dir_dn  # turn down
-    if snake_dir == dir_dn and y > 75:
-        snake_dir = dir_up  # turn up
+    if snake_dir == dir_1 and x < 10:
+        snake_dir = dir_3  # turn_right
+    if snake_dir == dir_3 and x > 155:
+        snake_dir = dir_1  # turn left
+    if snake_dir == dir_2 and y < 10:
+        snake_dir = dir_0  # turn down
+    if snake_dir == dir_0 and y > 75:
+        snake_dir = dir_2  # turn up
     if my_debug:
         print("var snake_dir = ", snake_dir)
         print("Snake initial direction: ", dir_dict[snake_dir])

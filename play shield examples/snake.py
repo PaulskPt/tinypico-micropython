@@ -13,8 +13,8 @@ dir_dn = 0
 dir_lt = 1
 dir_up = 2
 dir_rt = 3
-dir_dict = {0: {0: "left",  1: "up",    2: "right", 3: "down" },  # outer key = snake direction
-            1: {0: "down",  1: "left",  2: "up",    3: "right"},  # inner  key = display orientation
+dir_dict = {0: {0: "left",  1: "up",    2: "right", 3: "down" },  # outer key = display rotation
+            1: {0: "down",  1: "left",  2: "up",    3: "right"},  # inner key = snake direction
             2: {0: "right", 1: "down",  2: "left",  3: "up"   },
             3: {0: "up",    1: "right", 2: "down",  3: "left" }}
 class Snake:
@@ -130,7 +130,7 @@ class Snake:
                 self.add_fruit()
                 
         if my_debug:
-            print("Snake::move(): pos x,y: ({},{}), dir {}".format(hx, hy, dir_dict[self._rotation][self._dir]))
+            print("Snake::move(): pos hx,hy: ({},{}), dir: {}".format(hx, hy, dir_dict[self._rotation][self._dir]))
             print("All fruit positions: ", self._fruit)
             print("Fruit position: ({},{})".format(self._fruit[0][hori], self._fruit[0][vert]))
 
