@@ -32,7 +32,6 @@ Other global 'flags':
 File st7735.py copied from:  https://github.com/boochow/MicroPython-ST7735/blob/master/ST7735.py
 The 'class TFT' in file: st7735 .py has various functions added:
 set_size();
-get_size();
 get_rotation();
 get_offset();
 set_offset().
