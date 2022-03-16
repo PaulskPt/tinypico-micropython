@@ -126,8 +126,8 @@ dir_lt = 1
 dir_up = 2
 dir_rt = 3
 
-dir_dict = {0: {0: "down",  1: "left",  2: "up",    3: "right"},  # outer  key = display orientation
-            1: {0: "left",  1: "up",    2: "right", 3: "down" }, # innter key = snake direction
+dir_dict = {0: {0: "left",  1: "up",    2: "right", 3: "down" },  # outer key = snake direction
+            1: {0: "down",  1: "left",  2: "up",    3: "right"},  # inner  key = display orientation
             2: {0: "right", 1: "down",  2: "left",  3: "up"   },
             3: {0: "up",    1: "right", 2: "down",  3: "left" }}
 

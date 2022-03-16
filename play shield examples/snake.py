@@ -77,14 +77,10 @@ class Snake:
             self._dw = self._dh
             self._dh = t
             if my_debug:
-                print("Snake::move() dimensions after being reversed: dw, dh, dir = ", self._dw, self._dh, dir_dict[self._rotation][self._dir])
-                print("All fruit positions: ", self._fruit)
-                print("Fruit position: ({},{})".format(self._fruit[0][hori], self._fruit[0][vert]))
+                print("Snake::move() dimensions after being reversed: dw,dh: ({},{}), dir: {}".format(self._dw, self._dh, dir_dict[self._rotation][self._dir]))
         else:
             if my_debug:
-                print("Snake::move(): dw, dh, dir = ", self._dw, self._dh, dir_dict[self._rotation][self._dir])
-                print("All fruit positions: ", self._fruit)
-                print("Fruit position: ({},{})".format(self._fruit[0][hori], self._fruit[0][vert]))
+                print("Snake::move(): dw,dh: ({},{})".format(self._dw, self._dh ))
         remove_tail = [0,0,0,0]
         # renamed x,y into tx,ty to signify tail (mod by @Paulskpt)
         if len( self._list ) == self._length:
@@ -132,6 +128,11 @@ class Snake:
                 self.eat_food()
                 self._fruit.remove( f )
                 self.add_fruit()
+                
+        if my_debug:
+            print("Snake::move(): pos x,y: ({},{}), dir {}".format(hx, hy, dir_dict[self._rotation][self._dir]))
+            print("All fruit positions: ", self._fruit)
+            print("Fruit position: ({},{})".format(self._fruit[0][hori], self._fruit[0][vert]))
 
         return remove_tail
 
