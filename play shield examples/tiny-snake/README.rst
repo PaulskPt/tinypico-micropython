@@ -16,6 +16,7 @@ The game is not using a 'Play shield' (end of life reached?). It uses 3 external
 connected to certain pins of the TinyPICO.
 
 The 'class Snake' has been taken out of main.py and put in a separate file: snake.py
+In file snake.py added a global flag 'my_debug' for conditional print() during development
 
 Main.py has various global 'flags' to indicate which of certain models of displays 
 are being used for the snake game: 
@@ -24,7 +25,7 @@ The types of displays are devided into two groups:
 - b) a tft group:   st7735 (spi - tft).
 
 Other global 'flags':
-- my_debug;    a flag that is used for print statements during the development stage
+- my_debug;    a flag that is used for conditional print() during development
 - use_pullup;  a flag that is used for the i2c devices;
 - use_btn4;    self evident. Set to True if one uses a fourth button
 - use_sound.   self evident. Set to True is uses sound.
