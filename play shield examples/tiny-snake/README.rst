@@ -12,8 +12,8 @@ This is a forked/modified version by @PaulskPt
 It is specially adapted for the TinyPICO IPS DISPLAY SHIELD (contains a ST7735 LCD),
 but it can also be used with ssd1306 and sh1107 type of displays.
 
-The game is not using a 'Play shield' (end of life reached?). It uses 3 external buttons
-connected to certain pins of the TinyPICO.
+While the production of the 'Play Shield' has been discontinued, 
+this game uses 3 external buttons that are connected to certain pins of the TinyPICO.
 
 The 'class Snake' has been taken out of main.py and put in a separate file: snake.py
 In file snake.py added a global flag 'my_debug' for conditional print() during development
