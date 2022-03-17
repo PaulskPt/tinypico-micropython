@@ -4,19 +4,28 @@
 
 """
 import random, math
-my_debug = True
+from defs import pskDEFS  # get various definitions
 
-hori = 0
-vert = 1
+n = pskDEFS()
 
-dir_dn = 0
-dir_lt = 1
-dir_up = 2
-dir_rt = 3
-dir_dict = {0: {0: "left",  1: "up",    2: "right", 3: "down" },  # outer key = display rotation
-            1: {0: "down",  1: "left",  2: "up",    3: "right"},  # inner key = snake direction
-            2: {0: "right", 1: "down",  2: "left",  3: "up"   },
-            3: {0: "up",    1: "right", 2: "down",  3: "left" }}
+my_debug = n.get_debug()
+hori = n.get_hor()
+vert = n.get_vert()
+
+rt = n.get_rot()
+rot_000 = rt[0]
+rot_090 = rt[1]
+rot_180 = rt[2]
+rot_270 = rt[3]
+
+dr = n.get_dir()
+dir_0 = dr[0]
+dir_1 = dr[1]
+dir_2 = dr[2]
+dir_3 = dr[3]
+
+dir_dict = n.get_dir_dict()
+
 class Snake:
     def reset(self, x, y, len, dir):
         self._moves = 0
@@ -28,6 +37,8 @@ class Snake:
         self._fruit = []
         self._x = x  # added by @Paulskpt
         self._y = y  # idem
+        self.ul = n.get_ul()  # snake disp limit upper-left
+        self.lr = n.get_lr()  # snake disp limit lower-right
         if my_debug:
             print("Snake (reset) starts at position hor: {}, vert: {}, length: {}, direction: {}".format(self._x,
             self._y, len, dir_dict[self._rotation][dir]))
@@ -36,13 +47,13 @@ class Snake:
         # dynamically create snake body based on starting position
         for i in range( self._length-1 ):
 
-            if self._dir == dir_dn:
+            if self._dir == dir_0:
                 self._y += 2
-            elif self._dir == dir_lt:
+            elif self._dir == dir_1:
                 self._x -= 2
-            elif self._dir == dir_up:
+            elif self._dir == dir_2:
                 self._y -= 2
-            elif self._dir == dir_rt:
+            elif self._dir == dir_3:
                 self._x += 2
             
             self._list.append( [self._x, self._y] )
@@ -94,23 +105,41 @@ class Snake:
         hx, hy = self._list[0]
 
         # move the head based on the current direction
-        if self._dir == dir_dn:   # (move on contrary as defined reset() ?)
+        if self._dir == dir_0:   # (move on contrary as defined reset() ?)
             hy -= 2
-        elif self._dir == dir_lt:
+        elif self._dir == dir_1:
             hx += 2
-        elif self._dir == dir_up:
+        elif self._dir == dir_2:
             hy += 2
-        elif self._dir == dir_rt:
+        elif self._dir == dir_3:
             hx -= 2
+            
+            
+        """
+
+           Snake display move limits (for the 160x80 ST7735 display model)
+           
+                  6                        160
+                  |                         |
+           26  ---+-------------------------+---      (6,26)...(160,104)
+                  |                         |
+                  |                         |
+                  |                         |
+                  |                         |
+                  |                         |
+          104  ---+-------------------------+---             
+                  |                         |
+
+        """
 
         # Empirically determined values
-        ul = (6, 26)    # ul = upper-left
-        lr = (160, 104) # dr = lower-right
+        # ul = (6, 26)    # ul = upper-left
+        # lr = (160, 104) # dr = lower-right
         
         # Did we hit the outer bounds of the level?
         #hit_bounds = self._x < 1 or self._y < 1 or self._x > 125 or self._y > 61
         #hit_bounds = hx < 1 or hy < 1 or hx > self._dw-1 or hy > self._dh-1
-        hit_bounds = hx < ul[0] or hy < ul[1] or hx > lr[0] or hy > lr[1]
+        hit_bounds = hx < self.ul[hori] or hy < self.ul[vert] or hx > self.lr[hori] or hy > self.lr[vert]
 
         # Is the x,y position already in the list? If so, we hit ourselves and died - we also died if we hit the edge of the level 
         self._dead = self._list.count( [hx, hy] ) > 0 or hit_bounds
@@ -158,11 +187,11 @@ class Snake:
 
     def add_fruit(self):
         fx = random.randrange(2,60) * 2
-        if fx > self._dw:   # if block added by @Paulskpt
-            fx = self._dw
+        if fx > self.lr[hori]:  # was > self._dw:   # if block added by @Paulskpt
+            fx = self.lr[hori] # self._dw
         fy = random.randrange(2,30) * 2
-        if fy > self._dh:  # if block added by @Paulskpt
-            fy = self._dh
+        if fy > self.lr[vert]:  # was > self._dh:  # if block added by @Paulskpt
+            fy = self.lr[vert] #self._dh
         self._fruit.append( (fx, fy) )
 
     def get_fruit_positions(self):

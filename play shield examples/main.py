@@ -59,7 +59,6 @@ BUT_4 Pin(5) # not used
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/unexpectedmaker/tinypico"
 
-my_debug = True
 use_sh1107 = False
 use_ssd1306 = False
 use_st7735 = True
@@ -93,6 +92,8 @@ if use_st7735:
 import tinypico_helper as TinyPICO
 from micropython import const
 
+from defs import pskDEFS  # get various definitions
+
 # Turn off the power to the DotStar
 TinyPICO.set_dotstar_power( False )
 
@@ -119,17 +120,45 @@ fruit_next = 0
 default_freq = 1
 dflt_bg = None
 text_color = None
-disp_rotation = 3
+
+"""
+rot_000 = 0
+rot_090 = 1
+rot_180 = 2
+rot_270 = 3
 
 dir_0 = 0
 dir_1 = 1
 dir_2 = 2
 dir_3 = 3
 
-dir_dict = {0: {0: "left",  1: "up",    2: "right", 3: "down" },  # outer key = display rotation
-            1: {0: "down",  1: "left",  2: "up",    3: "right"},  # inner key = snake direction
-            2: {0: "right", 1: "down",  2: "left",  3: "up"   },
-            3: {0: "up",    1: "right", 2: "down",  3: "left" }}
+dir_dict = {rot_000: {0: "left",  1: "up",    2: "right", 3: "down" },  # outer key = display rotation
+            rot_090: {0: "down",  1: "left",  2: "up",    3: "right"},  # inner key = snake direction
+            rot_180: {0: "right", 1: "down",  2: "left",  3: "up"   },
+            rot_270: {0: "up",    1: "right", 2: "down",  3: "left" }}
+"""
+n = pskDEFS()
+
+my_debug = n.get_debug()
+hori = n.get_hor()
+vert = n.get_vert()
+
+rt = n.get_rot()
+rot_000 = rt[0]
+rot_090 = rt[1]
+rot_180 = rt[2]
+rot_270 = rt[3]
+
+dr = n.get_dir()
+dir_0 = dr[0]
+dir_1 = dr[1]
+dir_2 = dr[2]
+dir_3 = dr[3]
+
+
+dir_dict = n.get_dir_dict()
+
+disp_rotation = rot_270
 
 # Buttons
 BUT_1 = Pin(26, Pin.IN )
@@ -534,7 +563,9 @@ def main():
 
             # menu
             if game_state == 0:
-                flash_text( 26, 70, "Press 2 to start")
+                t = "Press 2 to start"
+                print(t)
+                flash_text( 26, 70, t)
                 if use_sh1107 or use_ssd1306:
                     oled.show()
                 time.sleep(.001)
@@ -543,7 +574,9 @@ def main():
                 draw_snake()
 
             elif game_state == 3:
-                flash_text( 52, 70, "GAME OVER")
+                t = "GAME OVER"
+                print(t)
+                flash_text( 52, 70, t)
                 if use_sh1107 or use_ssd1306:
                     oled.show()
                 time.sleep(.001)
