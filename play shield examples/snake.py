@@ -46,7 +46,6 @@ class Snake:
         self._list = [ [self._x, self._y] ]
         # dynamically create snake body based on starting position
         for i in range( self._length-1 ):
-
             if self._dir == dir_0:
                 self._y += 2
             elif self._dir == dir_1:
@@ -151,6 +150,7 @@ class Snake:
         for f in self._fruit:
             fx,fy = f
 
+            # Do we have a 'hit' (did the snake eat a fruit?)
             if self._x >= fx-2 and self._x <= fx+1 and self._y >= fy-2 and self._y <= fy+1:
                 remove_tail[2] = fx
                 remove_tail[3] = fy
@@ -178,6 +178,7 @@ class Snake:
         return self._score
 
     def eat_food(self):
+        print("BINGO !!! SNAKE EATS FOOD !!!")
         self._score += 1
         self._length += 2
         # reduce the speed time delay, burt clamped between 0.05 and 0.12

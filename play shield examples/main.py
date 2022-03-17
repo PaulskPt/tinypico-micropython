@@ -515,6 +515,8 @@ def main():
     # Create an instance of Snake
     len = 6
     dir = 0
+    game_over_shown = False
+    start_flag = True
     snake_start = set_snake_startpos() # generate a random start position
     snake = Snake( disp_width, disp_height, snake_start[0], snake_start[1], len, dir, disp_rotation )
     
@@ -541,6 +543,8 @@ def main():
                 if game_state == 0:
                     show_menu()
                 elif game_state == 1:
+                    start_flag = True
+                    game_over_shown = False
                     setup_new_game()
                 elif game_state == 3:
                     show_gameover()
@@ -548,7 +552,9 @@ def main():
             # menu
             if game_state == 0:
                 t = "Press 2 to start"
-                print(t)
+                if start_flag:
+                    start_flag = False
+                    print(t)
                 flash_text( 26, 70, t)
                 if use_sh1107 or use_ssd1306:
                     oled.show()
@@ -559,7 +565,9 @@ def main():
 
             elif game_state == 3:
                 t = "GAME OVER"
-                print(t)
+                if not game_over_shown:
+                    game_over_shown = True
+                    print(t)
                 flash_text( 52, 70, t)
                 if use_sh1107 or use_ssd1306:
                     oled.show()
