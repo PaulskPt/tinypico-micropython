@@ -121,22 +121,6 @@ default_freq = 1
 dflt_bg = None
 text_color = None
 
-"""
-rot_000 = 0
-rot_090 = 1
-rot_180 = 2
-rot_270 = 3
-
-dir_0 = 0
-dir_1 = 1
-dir_2 = 2
-dir_3 = 3
-
-dir_dict = {rot_000: {0: "left",  1: "up",    2: "right", 3: "down" },  # outer key = display rotation
-            rot_090: {0: "down",  1: "left",  2: "up",    3: "right"},  # inner key = snake direction
-            rot_180: {0: "right", 1: "down",  2: "left",  3: "up"   },
-            rot_270: {0: "up",    1: "right", 2: "down",  3: "left" }}
-"""
 n = pskDEFS()
 
 my_debug = n.get_debug()
